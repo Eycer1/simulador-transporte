@@ -16,6 +16,7 @@ void initBus(Bus* bus, int capacity, char* leaveTime)
     bus->free = capacity;
     bus->leaveTime = (char*) malloc(sizeof(char)*6);
     bus->charges = (List*) malloc(sizeof(List));
+    bus->status = -2;
     strcpy( bus->leaveTime, leaveTime );
     initList( bus->charges );
 }

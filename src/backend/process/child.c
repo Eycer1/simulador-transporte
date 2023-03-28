@@ -27,7 +27,8 @@ void* paradeTracker( void* arguments )
     Se obtiene apuntador al reloj de la ruta
     que modificara el hilo del reloj
     */
-    char* clock = args->timeRange[0];
+    char clock[6];
+    strcpy(clock, args->timeRange[0]);
     while ( strcmp( clock, args->timeRange[1] ) <= 0 && charges->next )
     {
         char arrivalTime[6] ={0};
@@ -124,8 +125,9 @@ void* busTracker( void * arguments )
 {
     struct threadBusArg* args = (struct threadBusArg*) arguments;
     Bus* bus = args->bus;
-    char* clock = args->timeRange[0];
-
+    char clock[6];
+    strcpy(clock, args->timeRange[0]);
+    printf("%s %s %s %s %s %s\n", clock, args->leaveTime, args->travelTime, args->arrivalTime, args->returnTime, args->finishTime);
         
     while ( strcmp( clock, args->timeRange[1] ) <= 0 )
     {
@@ -241,7 +243,7 @@ void initThreads( pthread_t* threads, Route* route, char* timeRange[2], struct s
         argument->semRead = &sem->busesRead[i];
         argument->semWrite = &sem->busesWrite[i];
         hourSum( argument->arrivalTime, argument->leaveTime, argument->travelTime ); //Hora de llegada a la parada
-        hourSum( argument->returnTime, argument->arrivalTime, argument->travelTime ); //Hora de retorno desde la parada
+        hourSum( argument->returnTime, argument->arrivalTime, "00:10" ); //Hora de retorno desde la parada
         hourSum( argument->finishTime, argument->returnTime, argument->travelTime ); //Hora de llegada a la universidad
         pthread_create( &threads[i], NULL, busTracker, (void*) argument );
         bus = bus->next;
