@@ -39,6 +39,7 @@ int initList( List* list );
 List* listPush( List* old, ListContent* content);
 List* listPushAtEnd( List* old, ListContent* content);
 List* reverseList( List* list );
+void mergeList( List** answer, List* list );
 void printList(List* list);
 
 #endif
