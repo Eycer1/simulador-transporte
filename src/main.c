@@ -7,6 +7,7 @@
 #include "backend/service/service.h"
 #include "backend/service/route.h"
 #include "backend/utils/list.h"
+#include "backend/utils/hours.h"
 #include "backend/process/parent.h"
 
 /*
@@ -103,15 +104,19 @@ char** getTimeRange( List* routesList )
         List* bus = routes->content->route->service->buses;
         while (bus->next)
         {
-            char hour[6];
-            strcpy(hour, bus->content->bus->leaveTime);
-            if (strcmp(hour, minimHour) < 0)
+            char arrivalTime[6];
+            char returnTime[6];
+            char finishTime[6];
+            hourSum( arrivalTime, bus->content->bus->leaveTime, routes->content->route->travelTime ); //Hora de llegada a la parada
+            hourSum( returnTime, arrivalTime, "00:11" ); //Hora de retorno desde la parada mas un minuto para terminar de cerrar el hilo
+            hourSum( finishTime, returnTime, routes->content->route->travelTime ); //Hora de llegada a la universidad
+            if (strcmp(finishTime, minimHour) < 0)
             {
-                strcpy(minimHour, hour);
+                strcpy(minimHour, finishTime);
             }
-            if (strcmp(hour, maxHour) > 0)
+            if (strcmp(finishTime, maxHour) > 0)
             {
-                strcpy(maxHour, hour);
+                strcpy(maxHour, finishTime);
             }
             bus = bus->next;
         }
