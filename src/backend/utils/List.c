@@ -84,3 +84,26 @@ void printList(List* list)
         i = i->next;
     }
 }
+
+void mergeList( List** answer, List* list )
+{
+    if(answer && (*answer)->content == NULL && (*answer)->next == NULL)
+    {
+        *answer = list;
+    }
+    else
+    {
+        int l1 = (*answer)->lenght;
+        int l2 = list->lenght;
+        int l = l1+l2;
+        List* dummy = (*answer);
+        while (dummy->next->content)
+        {
+            dummy->lenght = l;
+            l--;
+            dummy = dummy->next;
+        }
+        dummy->next = list;
+    }
+    
+}

@@ -61,7 +61,6 @@ void fillBusWithChargesFromParade( Parade* parade, Bus* bus )
     if (bus->free > 0 && parade->numWaiting > 0 )
     {
         List* list = popUsersFromParade(parade, &bus->free);
-        while (list->next) list = list->next;
-        list->next = bus->charges;
+        mergeList( &bus->charges, list );
     }
 }
