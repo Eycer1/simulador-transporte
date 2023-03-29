@@ -46,7 +46,7 @@ void* paradeTracker( void* arguments )
         }
 
         sem_wait(args->semWrite);
-        sprintf(  parade->buffer, "%d", parade->numWaiting );
+        sprintf(  parade->buffer, "%03d\t", parade->numWaiting );
         sem_post(args->semRead);
         incressHour2(clock, clock);
     }
