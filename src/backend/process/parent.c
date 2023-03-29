@@ -37,7 +37,6 @@ void waitChildren( List* routeElementList )
     int n = routeElementList->lenght;
     for (int i = 0; i < n; i++)
     {
-        printf("Padre Esperando Hijos\n");
         wait(NULL);
     }
     
@@ -82,7 +81,7 @@ void monitorRoutesDeamon( List* routesList, float timeFactor, char* timeRange[2]
     hoursDifference( timeRange[1], timeRange[0] );
     while( minutes < maxMin )
     {
-        // system("clear");
+        system("clear");
         printHeader();
         printf("%02d:%02d\n", hour, min);
         char* prtString = getRoutesStatus(routesList);

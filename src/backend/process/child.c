@@ -17,7 +17,6 @@ en la cola de la parada
 */
 void* paradeTracker( void* arguments )
 {
-    printf("Despachador de parada Iniciado\n");
     // Inicialzacion
     struct threadBusArg* args = (struct threadBusArg*) arguments;
     Parade* parade = args->parade;
@@ -132,8 +131,6 @@ void* busTracker( void * arguments )
     Bus* bus = args->bus;
     char clock[6];
     strcpy(clock, args->timeRange[0]);
-    printf("Iniciado hilo de autobus\n");
-    printf("%s %s %s %s %s %s\n", clock, args->leaveTime, args->travelTime, args->arrivalTime, args->returnTime, args->finishTime);
 
     while ( strcmp( clock, args->timeRange[1] ) <= 0 )
     {
@@ -342,12 +339,10 @@ void childProcessStart( Route* route, char* timeRange[2] )
     los semaforos e iniciamos el monitoreo de los hilos, al teminar
     se recogen los hilos
     */
-   printf("Inicio de Proceso Hijo\n");
     struct semaphores sem;
     int numBuses = route->service->buses->lenght;
     pthread_t threads[numBuses+1];
     initThreads( threads, route, timeRange, &sem );
     monitorBusesDeamon( route, timeRange, &sem );
     joinThreads( threads, numBuses );
-    printf("Finalizo Proceso Hijo\n");
 }
