@@ -75,11 +75,11 @@ void fillBuffer(char* buffer, int bufferSize, int percentage, int status)
         }
     }
     else if( status == 0 ){
-        strcpy(buffer, " [--Waiting--] ");
+        strcpy(buffer, " [--Waiting-] ");
     }
     else if( status == 2 )
     {
-        strcpy(buffer, " [--Finish--] ");
+        strcpy(buffer, " [--Finish-] ");
     }
     
 }
@@ -345,4 +345,5 @@ void childProcessStart( Route* route, char* timeRange[2] )
     initThreads( threads, route, timeRange, &sem );
     monitorBusesDeamon( route, timeRange, &sem );
     joinThreads( threads, numBuses );
+    printf("Finalizo Proceso Hijo\n");
 }

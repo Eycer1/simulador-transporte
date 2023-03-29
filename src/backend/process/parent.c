@@ -37,6 +37,7 @@ void waitChildren( List* routeElementList )
     int n = routeElementList->lenght;
     for (int i = 0; i < n; i++)
     {
+        printf("Padre Esperando Hijos\n");
         wait(NULL);
     }
     
@@ -81,7 +82,7 @@ void monitorRoutesDeamon( List* routesList, float timeFactor, char* timeRange[2]
     hoursDifference( timeRange[1], timeRange[0] );
     while( minutes < maxMin )
     {
-        system("clear");
+        // system("clear");
         printHeader();
         printf("%02d:%02d\n", hour, min);
         char* prtString = getRoutesStatus(routesList);
@@ -104,7 +105,7 @@ de los hijos
 void parentProcessStart( List* routesList, float timeFactor, char* timeRange[2] )
 {
     printf("Iniciando proceso padre...\n");
-    sleep(2);
+    sleep(1);
     createChildren( routesList, timeRange, timeFactor);
     monitorRoutesDeamon(routesList, timeFactor, timeRange);
     waitChildren( routesList );

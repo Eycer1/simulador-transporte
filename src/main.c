@@ -126,12 +126,12 @@ char** getTimeRange( List* routesList )
         while (charge->next)
         {
             char hour[6] = {0};
-            sprintf(hour, "%d:00", charge->content->charge->parateArrivalTime);
+            sprintf(hour, "%02d:00", charge->content->charge->parateArrivalTime);
             if (strcmp(hour, minimHour) < 0)
             {
                 strcpy(minimHour, hour);
             }
-            if (strcmp(hour, minimHour) > 0)
+            if (strcmp(hour, maxHour) > 0)
             {
                 strcpy(maxHour, hour);
             }
