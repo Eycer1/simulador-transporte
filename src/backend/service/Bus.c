@@ -50,7 +50,7 @@ Establece el estatus del autobus como finalizado
 */
 void setBusAsFinished( Bus* bus )
 {
-    bus->status = 2;
+    bus->status = -2;
 }
 
 /*

@@ -29,9 +29,7 @@ int hoursDifference( char* hour1, char* hour2 )
         m1 = m1 + 60;
         h1--;
     }
-        
-    
-    
+            
     return (h1-h2)*60 + (m1-m2);
     
 }
