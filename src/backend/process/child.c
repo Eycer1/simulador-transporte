@@ -82,7 +82,7 @@ void fillBuffer(char* buffer, int bufferSize, int percentage, int status)
     }
     else if( status == 2 )
     {
-        strcpy(buffer, " [--Finish-] ");
+        strcpy(buffer, " [--Finish--] ");
     }
     
 }
