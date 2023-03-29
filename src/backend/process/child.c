@@ -57,10 +57,10 @@ void fillBuffer(char* buffer, int bufferSize, int percentage, int status)
 {
     char sign = status == -1 ? '>' : '-';
     sign = status == 1 ? '<' : sign;
-    strcpy(buffer, " [----------] ");
 
     if (status == -1 && percentage < 100)
     {
+        strcpy(buffer, " [----------] ");
         for (int i = 2; i < percentage/10+2; i++)
         {
             buffer[i] = sign;
@@ -68,18 +68,14 @@ void fillBuffer(char* buffer, int bufferSize, int percentage, int status)
     }
     else if( status == 1 && percentage < 100 )
     {
+        strcpy(buffer, " [----------] ");
         for (int i = percentage/10+1; i >= 2; i--)
         {
             buffer[i] = sign;
         }
     }
     else if( status == 0 ){
-        memset( buffer, 0, bufferSize );
         strcpy(buffer, " [--Waiting--] ");
-    }
-    else if ( status == -2 )
-    {
-        memset( buffer, 0, bufferSize );
     }
     
 }
@@ -112,7 +108,8 @@ void reportTravelProgress( Bus* bus, Parade* parade, char* clock, char* travelTi
     Se obtiene porcentaje progreso del viaje 
     para luego llenar el buffer que leera el hilo principal
     */
-    int percentage = getProgressPercentage( startTime, endTime, travelTime, clock);
+    int percentage = 0;
+    percentage = getProgressPercentage( startTime, endTime, travelTime, clock);
     fillBuffer(bus->buffer, BUS_BUFFER_SIZE, percentage, bus->status);
 }
 
@@ -128,7 +125,7 @@ void* busTracker( void * arguments )
     char clock[6];
     strcpy(clock, args->timeRange[0]);
     printf("%s %s %s %s %s %s\n", clock, args->leaveTime, args->travelTime, args->arrivalTime, args->returnTime, args->finishTime);
-        
+
     while ( strcmp( clock, args->timeRange[1] ) <= 0 )
     {
         if ( strcmp(clock, args->leaveTime) == 0 )
