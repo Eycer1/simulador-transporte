@@ -160,7 +160,7 @@ void* busTracker( void * arguments )
         */
         if (bus->status == 0) 
         {
-            //fillBusWithChargesFromParade( args->parade, bus );
+            fillBusWithChargesFromParade( args->parade, bus );
         }
         
         sem_wait(args->semWrite);

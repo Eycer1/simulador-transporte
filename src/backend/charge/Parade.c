@@ -49,11 +49,10 @@ List* popUsersFromParade( Parade* parade, int* freeSpace )
         List* list = (List*) malloc( sizeof(List) );
         initList( list );
         List* queue = parade->waitingCharges;
-        int numUsersCpy = *freeSpace;
-        while ( *freeSpace > 0 )
+        while ( *freeSpace > 0  && parade->numWaiting > 0)
         {
             queue = parade->waitingCharges;
-            while (queue->next) queue = queue->next;
+            printf("%d\n", queue->content->charge->parateArrivalTime);
             if (queue->content->charge->numUsers > *freeSpace)
             {
                 /*
@@ -77,21 +76,12 @@ List* popUsersFromParade( Parade* parade, int* freeSpace )
                 la cola de cargas esperando en la parada
                 */
 
-                /*Se sube la carga al autobus*/
+                /*Se sube la carga al autobus y se saca de la cola*/
+                parade->waitingCharges = queue->next;
                 queue->next = list;
                 list = queue;
-
-                /* Se elimina la carga de la cola */
-                queue = parade->waitingCharges;
-                while (queue->next && queue->next->next) queue = queue->next;
-                queue->next = NULL;
-
                 parade->numWaiting -= list->content->charge->numUsers;
                 *freeSpace -= list->content->charge->numUsers;
-            }
-            if(parade->numWaiting == 0 )
-            {
-                break;
             }
         }
         return list;
