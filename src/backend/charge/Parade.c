@@ -52,7 +52,6 @@ List* popUsersFromParade( Parade* parade, int* freeSpace )
         while ( *freeSpace > 0  && parade->numWaiting > 0)
         {
             queue = parade->waitingCharges;
-            printf("%d\n", queue->content->charge->parateArrivalTime);
             if (queue->content->charge->numUsers > *freeSpace)
             {
                 /*
