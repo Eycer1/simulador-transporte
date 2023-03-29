@@ -34,7 +34,13 @@ Esperar a todos los hijos del proceso padre
 */
 void waitChildren( List* routeElementList )
 {
-    while(wait(NULL) > 0);
+    int n = routeElementList->lenght;
+    for (int i = 0; i < n; i++)
+    {
+        printf("Padre Esperando Hijos\n");
+        wait(NULL);
+    }
+    
 }
 
 /*
@@ -70,10 +76,11 @@ con ciclo de ejecucion cada timeFactor segundos
 void monitorRoutesDeamon( List* routesList, float timeFactor, char* timeRange[2] )
 {
     int minutes = 0;
-    int hour, min, maxHour, maxMin;
+    int maxMin = hoursDifference( timeRange[1], timeRange[0] );
+    int hour, min;
     sscanf( timeRange[0], "%d:%d", &hour, &min );
-    sscanf( timeRange[1], "%d:%d", &maxHour, &maxMin );
-    while( minutes < 300 )
+    hoursDifference( timeRange[1], timeRange[0] );
+    while( minutes < maxMin )
     {
         //system("clear");
         printHeader();
@@ -82,6 +89,7 @@ void monitorRoutesDeamon( List* routesList, float timeFactor, char* timeRange[2]
         printf("%s\n", prtString);
         usleep(timeFactor*1000000);
         incressHour( &hour, &min );
+        minutes++;
     }
 }
 
@@ -100,5 +108,5 @@ void parentProcessStart( List* routesList, float timeFactor, char* timeRange[2] 
     sleep(2);
     createChildren( routesList, timeRange, timeFactor);
     monitorRoutesDeamon(routesList, timeFactor, timeRange);
-    // waitChildren( routesList );
+    waitChildren( routesList );
 }

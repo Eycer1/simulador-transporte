@@ -17,10 +17,11 @@ Miembros:
     desde la universidad
 - free: numero de acientos libres
 - status: {
+        -2: Si no ha comenzado a prestar el servicio
         -1: "En camino de ida a la parada"
         0: "Esperando en la parada los 10 minutos"
         1: "En camino de regreso"
-        -2: Si no ha comenzado a prestar el servicio o finalizo el servicio
+        2: "Finalizo el servicio" o finalizo el servicio
     }
 - progress: progreso del estatus actual (del 1 al 10)
 - charges: Lista de cargas de pasajeros que abordaron el autobus

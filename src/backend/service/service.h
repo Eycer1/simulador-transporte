@@ -16,12 +16,10 @@ Miembros:
 - travelTime: Duracion del recorrido
 - buses: Lista de autobuses asociados a la ruta (cada autobus conoce su hora de salida,
     esto permite que diferentes rutas puedan tener diferentes horas de salida de autobuses).
-- onTravelBuses: Lista de autobuses actualmente cumpliendo el servicio
 */
 
 struct Service
 {
-    List* onTravelBuses;
     List* buses;
 };
 

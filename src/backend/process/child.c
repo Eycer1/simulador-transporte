@@ -69,13 +69,17 @@ void fillBuffer(char* buffer, int bufferSize, int percentage, int status)
     else if( status == 1 && percentage < 100 )
     {
         strcpy(buffer, " [----------] ");
-        for (int i = percentage/10+1; i >= 2; i--)
+        for (int i = 0; i < percentage/10+1; i++)
         {
-            buffer[i] = sign;
+            buffer[11-i] = sign;
         }
     }
     else if( status == 0 ){
         strcpy(buffer, " [--Waiting--] ");
+    }
+    else if( status == 2 )
+    {
+        strcpy(buffer, " [--Finish--] ");
     }
     
 }
@@ -145,7 +149,7 @@ void* busTracker( void * arguments )
         else if (strcmp(clock, args->finishTime) == 0)
         {
             setBusAsFinished(bus);
-            *args->numBusesOnService++;
+            *args->numBusesOnService--;
         }
 
         /*
@@ -232,7 +236,6 @@ void initThreads( pthread_t* threads, Route* route, char* timeRange[2], struct s
     {
         struct threadBusArg* argument = (struct threadBusArg*) malloc(sizeof(struct threadBusArg));
         argument->timeRange = timeRange;
-        argument->numBusesOnService = &route->service->onTravelBuses->lenght;
         argument->bus = bus->content->bus;
         argument->parade = route->parade;
         argument->travelTime = route->travelTime;
@@ -273,6 +276,8 @@ void monitorBusesDeamon( Route* route, char* timeRange[2], struct semaphores* se
     int flag = 1;
     int fd = route->pip[1];
     int numBuses = route->service->buses->lenght;
+    int numReadyBuses = 0;
+    int maxMin = hoursDifference(timeRange[1], timeRange[0]);
     do
     {
         /*
@@ -314,9 +319,9 @@ void monitorBusesDeamon( Route* route, char* timeRange[2], struct semaphores* se
         // Se escribe el buffer en el pipe
         strcat( buffer, "\n" );
         flag = write(fd, buffer, MSGSIZE);
-
+        maxMin--;
     }
-    while ( flag != -1  && route->service->onTravelBuses->lenght == 0);
+    while ( flag != -1 && maxMin > 0);
 }
 
 /*
@@ -339,4 +344,5 @@ void childProcessStart( Route* route, char* timeRange[2] )
     initThreads( threads, route, timeRange, &sem );
     monitorBusesDeamon( route, timeRange, &sem );
     joinThreads( threads, numBuses );
+    printf("Finalizo Proceso Hijo\n");
 }

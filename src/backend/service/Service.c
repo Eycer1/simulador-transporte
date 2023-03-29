@@ -6,9 +6,7 @@ Se inicializa el servicio con las listas vacias
 */
 void initService( Service* service )
 {
-    service->onTravelBuses = (List*) malloc(sizeof(List));
     service->buses = (List*) malloc(sizeof(List));
-    initList(service->onTravelBuses);
     initList( service->buses );
 }
 
