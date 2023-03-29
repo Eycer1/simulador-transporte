@@ -1,46 +1,34 @@
 #include "service.h"
 #include <string.h>
 
-/*
-Se inicializa el servicio con las listas vacias
-*/
-void initService( Service* service )
+void initService(Service *service)
 {
-    service->buses = (List*) malloc(sizeof(List));
-    initList( service->buses );
+    service->buses = (List *)malloc(sizeof(List));
+    initList(service->buses);
 }
 
-/*
-Insertar Bus a la lista de buses del servicio
-*/
-void insertBus( Service* service, Bus* bus )
+void insertBus(Service *service, Bus *bus)
 {
-    ListContent* busContent = (ListContent*) malloc(sizeof(ListContent));
-    busContent->bus = bus; 
+    ListContent *busContent = (ListContent *)malloc(sizeof(ListContent));
+    busContent->bus = bus;
     listPush(service->buses, busContent);
 }
 
-/*
-Se agrega una nueva carga a la lista de cargas que llegaran a la parada
-*/
-void insertBusToService( Service* service, Bus* bus ){
-    ListContent* content = (ListContent*) malloc(sizeof(ListContent));
+void insertBusToService(Service *service, Bus *bus)
+{
+    ListContent *content = (ListContent *)malloc(sizeof(ListContent));
     content->bus = bus;
-    service->buses = listPush( service->buses, content );
-
+    service->buses = listPush(service->buses, content);
 }
 
-/*
-Dada una secuencia de autobuses se llena la lista de autobuses
-que prestaran el
-*/
-Service* createService( char* stoken ){
-    Service* service = (Service*) malloc(sizeof(Service));
+Service *createService(char *stoken)
+{
+    Service *service = (Service *)malloc(sizeof(Service));
     initService(service);
     // Se leen los autobuses
     for (int i = 0; stoken != NULL; i++)
     {
-        Bus* bus = (Bus*) malloc(sizeof(Bus));
+        Bus *bus = (Bus *)malloc(sizeof(Bus));
         int capacity;
         int hour;
         int min;

@@ -1,6 +1,10 @@
 {
     "files.associations": {
         "service.h": "c",
-        "hours.h": "c"
+        "hours.h": "c",
+        "string.h": "c",
+        "charge.h": "c",
+        "child.h": "c",
+        "list.h": "c"
     }
 }

@@ -1,6 +1,6 @@
 #include "charge.h"
 
-void initCharge( Charge* charge, int time, int numUsers )
+void initCharge(Charge *charge, int time, int numUsers)
 {
     if (numUsers < 0)
     {

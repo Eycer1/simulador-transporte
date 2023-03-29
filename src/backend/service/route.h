@@ -17,25 +17,31 @@ struct route
     char cod[4];
     char name[50];
     char travelTime[6];
-    int pip[2]; //Pipe de comunicacion con el proceso padre
-    Parade* parade;
-    Service* service;
+    int pip[2]; // Pipe de comunicacion con el proceso padre
+    Parade *parade;
+    Service *service;
 };
 
-/*
-Se inicializa una ruta:
-- route: ruta a inicializar
-- cod: codigo de la ruta
-- name: nombre de la localidad al que se le presta el servicio
-- parade: Parada a cubrir
-- service: transportes que cubren la ruta
-*/
-void initRoute( Route* route, char* cod, char* name, char* travelTime, Parade* parade, Service* service );
+/**
+ * @brief Inicializa una ruta.
+ *
+ * @param route Puntero a la ruta a inicializar.
+ * @param cod Código de la ruta.
+ * @param name Nombre de la ruta.
+ * @param travelTime Tiempo de viaje de la ruta.
+ * @param parade Puntero a la parada asociada a la ruta.
+ * @param service Puntero al servicio asociado a la ruta.
+ */
+void initRoute(Route *route, char *cod, char *name, char *travelTime, Parade *parade, Service *service);
 
-/*
-Se Crea una lista de rutas correspondiente a los archivos especificados
-La lista contendra estructuras Route
-*/
-List* createRoutes( char* serviceFile, char* loadFile);
+/**
+ * @brief Crea una lista de rutas correspondiente a los archivos especificados.
+ * La lista contendrá estructuras Route que están explicadas en su archivo correspondiente.
+ *
+ * @param serviceFile Nombre del archivo de servicios.
+ * @param loadFile Nombre del archivo de cargas.
+ * @return Puntero a la lista de rutas creada.
+ */
+List *createRoutes(char *serviceFile, char *loadFile);
 
 #endif // ROUTE_H

@@ -20,22 +20,38 @@ Miembros:
 
 struct Service
 {
-    List* buses;
+    List *buses;
 };
 
-void initService( Service* service );
-/*
-Insertar Bus a la lista de buses del servicio
-*/
-void insertBus( Service* service, Bus* bus );
-/*
-Se inserta un autobus al servicio
-*/
-void insertBusToService( Service* service, Bus* bus );
-/*
-Dada una secuencia de autobuses se llena la lista de autobuses
-que prestaran el
-*/
-Service* createService( char* stoken );
+/**
+ * @brief Inicializa el servicio con las listas vacías.
+ *
+ * @param service Puntero al servicio a inicializar.
+ */
+void initService(Service *service);
+
+/**
+ * @brief Inserta un autobús a la lista de autobuses del servicio.
+ *
+ * @param service Puntero al servicio donde se insertará el autobús.
+ * @param bus Puntero al autobús a insertar.
+ */
+void insertBus(Service *service, Bus *bus);
+
+/**
+ * @brief Agrega un nuevo autobús a la lista de autobuses del servicio.
+ *
+ * @param service Puntero al servicio donde se agregará el autobús.
+ * @param bus Puntero al autobús a agregar.
+ */
+void insertBusToService(Service *service, Bus *bus);
+
+/**
+ * @brief Crea un servicio a partir de una secuencia de autobuses.
+ *
+ * @param stoken Cadena que contiene la secuencia de autobuses.
+ * @return Puntero al servicio creado.
+ */
+Service *createService(char *stoken);
 
 #endif // SERVICE_H

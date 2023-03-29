@@ -1,7 +1,6 @@
 #if !defined(PARADE_H)
 #define PARADE_H
 
-
 typedef struct parade Parade;
 
 #include <stdlib.h>
@@ -11,51 +10,61 @@ typedef struct parade Parade;
 #include <pthread.h>
 #include <semaphore.h>
 
-/*
-Estructura Parada para simular el estado de una parada
-
-Miembros:
-cod: Es el codigo de la parada. Esta debe representar el lugar de ubicacion
-    de la parada. por ejemplo BRT para baruta
-waiting: Cantidad de personas esperando en la fila de la parada para abordar el autobus
-        en todo caso debe ser igual a la suma de los pasajeros de todas las cargas que
-        hay en la lista de cargas
-waitingCharges: Lista de cargas de usuarios que han llegado a la parada
-*/
+/**
+ * Estructura Parade para simular el estado de una parada.
+ *
+ * Miembros:
+ * waitingCharges: Lista de cargas de usuarios que han llegado a la parada.
+ * charges: Lista de cargas en la parada.
+ * numWaiting: Cantidad de personas esperando en la fila de la parada para abordar el autobús. En todo caso, debe ser igual a la suma de los pasajeros de todas las cargas que hay en la lista de cargas.
+ * buffer: Código de la parada. Esta debe representar el lugar de ubicación de la parada. Por ejemplo, BRT para Baruta.
+ */
 struct parade
 {
-    List* waitingCharges;
-    List* charges;
+    List *waitingCharges;
+    List *charges;
     int numWaiting;
-    char buffer[6];    
+    char buffer[6];
 };
 
-/*
-Se inicializa la parada
-*/
-void initParade( Parade* parade );
+/**
+ * Se inicializa la parada con el codigo, la cantidad de personas esperando se inicia en 0 y
+ * la lista de cargas vacias
+ *
+ * @param parade Puntero al objeto Parade que se va a inicializar.
+ */
+void initParade(Parade *parade);
 
-/*
-Se agrega una carga a la fila de cargas en la parada
-*/
-void insertChargeToParade( Parade* parade, Charge* charge );
+/**
+ * Agrega una nueva carga a la lista de cargas que llegarán a la parada.
+ *
+ * @param parade Puntero al objeto Parade al que se agregará la carga.
+ * @param charge Puntero al objeto Charge que se agregará a la lista de cargas que llegarán a la parada.
+ */
+void insertChargeToParade(Parade *parade, Charge *charge);
 
-/*
-Se agrega una carga a la fila de cargas esperando en la parada
-*/
-void insertChargeWaiting( Parade* parade );
+/**
+ * Agrega una nueva carga a la lista de cargas en espera en la parada. Se extrae directamente de la lista de cargas que llegarán a la parada.
+ *
+ * @param parade Puntero al objeto Parade al que se agregará la carga en espera.
+ */
+void insertChargeWaiting(Parade *parade);
 
-/*
-Se crea una parada dada la secuencia de cargas que llegaran al destino
-en ctoken, y el el arrego de horas en las que llegaran las cargas a la parada
-*/
-Parade* createParade(char* ctoken, int* hours);
+/**
+ * Crea una parada dada la secuencia de cargas que llegarán al destino en ctoken y el arreglo de horas en las que llegarán las cargas a la parada.
+ *
+ * @param ctoken Cadena de caracteres que representa la secuencia de cargas que llegarán al destino. Las cargas están separadas por comas.
+ * @param hours Arreglo de enteros que representa las horas en las que llegarán las cargas a la parada.
+ * @return Puntero al objeto Parade creado.
+ */
+Parade *createParade(char *ctoken, int *hours);
 
-/*
-Se retorna la Lista de cargas a subir de la parada al 
-autobus y acualiza la cola de cargas en espera retirando las cargas
-que subieron y separando las cargas que no subieron completamente
-dejando en la cola al remanente
-*/
-List* popUsersFromParade( Parade* parade, int* free );
+/**
+ * Retorna la lista de cargas a subir de la parada al autobús y actualiza la cola de cargas en espera retirando las cargas que subieron y separando las cargas que no subieron completamente, dejando en la cola al remanente.
+ *
+ * @param parade Puntero al objeto Parade del que se extraerán las cargas.
+ * @param freeSpace Puntero a un entero que representa el espacio libre en el autobús. Se actualizará con el espacio libre restante después de subir las cargas.
+ * @return Lista de cargas a subir al autobús.
+ */
+List *popUsersFromParade(Parade *parade, int *free);
 #endif

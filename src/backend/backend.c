@@ -6,9 +6,13 @@
 #include "service/service.h"
 #include "service/route.h"
 
-/*
-Programa de pruebas del backend
-*/
+/**
+ * @brief Programa de pruebas del backend.
+ *
+ * @param argc Número de argumentos pasados al programa.
+ * @param argv Arreglo de cadenas que contiene los argumentos pasados al programa.
+ * @return 0 si el programa se ejecutó correctamente.
+ */
 int main(int argc, char const *argv[])
 {
     printf("Start!!\n");
