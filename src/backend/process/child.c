@@ -30,7 +30,7 @@ void* paradeTracker( void* arguments )
     char clock[6];
     strcpy(clock, args->timeRange[0]);
     while ( strcmp( clock, args->timeRange[1] ) <= 0 && charges->next )
-    {
+    {   
         char arrivalTime[6] ={0};
 
         sprintf(arrivalTime, "%02d:00", charges->content->charge->parateArrivalTime );
@@ -41,7 +41,7 @@ void* paradeTracker( void* arguments )
             charges = charges->next;
             
         }
-        
+
         sem_wait(args->semWrite);
         sprintf(  parade->buffer, "%d", parade->numWaiting );
         sem_post(args->semRead);
