@@ -154,6 +154,75 @@ char** getTimeRange( List* routesList )
     return timeRange;
 }
 
+void printfFinalReport( List* routes )
+{
+    List* route = routes;
+    int numUsersInTime = 0;
+    int numUsersOutTime = 0;
+    int numUsersFail = 0;
+    while (route->next)
+    {
+        // Usuarios en la universidad (que abordaron algun bus)
+        List* bus = route->content->route->service->buses;
+        while (bus->next)
+        {
+            List* charge = bus->content->bus->charges;
+            printf("Bus de %s en %p, libre %d\n", bus->content->bus->leaveTime, bus->content->bus, bus->content->bus->status);
+            char leaveTime[6];
+            char travelTime[6];
+            char arrivalTime[6];
+            char returnTime[6];
+            char finishTime[6];
+            strcpy(leaveTime, bus->content->bus->leaveTime);
+            strcpy(travelTime, routes->content->route->travelTime);
+            hourSum( arrivalTime, leaveTime, travelTime ); //Hora de llegada a la parada
+            hourSum( returnTime, arrivalTime, "00:10" ); //Hora de retorno desde la parada mas un minuto para terminar de cerrar el hilo
+            hourSum( finishTime, returnTime, travelTime ); //Hora de llegada a la universidad
+
+            while (charge->next)
+            {
+                printf("entro\n");
+                char expected[6];
+                char paradeArrivalTime[6];
+                sprintf(paradeArrivalTime, "%02d:00", charge->content->charge->parateArrivalTime);
+                hourSum( expected, paradeArrivalTime, "01:30" ); // Se espera llegar 1:30 despues de llegar a la parada
+                printf("Expected: %s\n", expected);
+
+                if (strcmp( expected, finishTime ) <= 0)
+                {
+                    numUsersInTime += charge->content->charge->numUsers;
+                }
+                else
+                {
+                    numUsersOutTime += charge->content->charge->numUsers;
+                }
+                
+                charge = charge->next;
+            }
+            
+            bus = bus->next;
+        }
+        // Usuarios en la parada (que no abordaron ningun bus)
+
+        Parade* parade = route->content->route->parade;
+        List* charge = parade->waitingCharges;
+        while (charge->next)
+        {
+            numUsersFail += charge->content->charge->numUsers;
+            charge = charge->next;
+        }
+        
+        route = route->next;
+    }
+    /*
+    Se Muestran los resultados obtenidos
+    */
+    printf("###### RESULTADOS DE LA SIMULACION ######\n");
+    printf("Numero de personas que llegaron a tiempo a la Universidad: %d\n", numUsersInTime);
+    printf("Numero de personas que llegaron tarde a la Universidad: %d\n", numUsersOutTime);
+    printf("Numero de personas que No llegaron a la Universidad: %d\n", numUsersFail);
+    
+}
 
 int main(int argc, char *argv[])
 {
@@ -187,7 +256,10 @@ int main(int argc, char *argv[])
     */
     parentProcessStart(&routes, timeFactor, timeRange);
 
-    printf("Fin del programa\n");
+    /*
+    Se imprime el Reporte Final Una ver el proceso termine, y espere a sus hijos
+    */
+   printfFinalReport(&routes);
 
     return 0;
 }
