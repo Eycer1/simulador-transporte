@@ -57,8 +57,6 @@ void fillBuffer(char* buffer, int bufferSize, int percentage, int status)
 {
     char sign = status == -1 ? '>' : '-';
     sign = status == 1 ? '<' : sign;
-    printf("Porcentaje: %d\n", percentage/10+2);
-
 
     if (status == -1 && percentage < 100)
     {
@@ -209,10 +207,10 @@ Se liberan los semaforos relacionados con la escritura
 */
 void postWriteSemaphores( struct semaphores* sem, int numBuses)
 {
-    sem_post(&sem->paradeRead);
+    sem_post(&sem->paradeWrite);
     for (int i = 0; i < numBuses; i++)
     {
-        sem_post(&sem->busesRead[i]);
+        sem_post(&sem->busesWrite[i]);
     }
 }
 
