@@ -104,15 +104,19 @@ char** getTimeRange( List* routesList )
         List* bus = routes->content->route->service->buses;
         while (bus->next)
         {
+            char leaveTime[6];
+            char travelTime[6];
             char arrivalTime[6];
             char returnTime[6];
             char finishTime[6];
-            hourSum( arrivalTime, bus->content->bus->leaveTime, routes->content->route->travelTime ); //Hora de llegada a la parada
+            strcpy(leaveTime, bus->content->bus->leaveTime);
+            strcpy(travelTime, routes->content->route->travelTime);
+            hourSum( arrivalTime, leaveTime, travelTime ); //Hora de llegada a la parada
             hourSum( returnTime, arrivalTime, "00:11" ); //Hora de retorno desde la parada mas un minuto para terminar de cerrar el hilo
-            hourSum( finishTime, returnTime, routes->content->route->travelTime ); //Hora de llegada a la universidad
-            if (strcmp(finishTime, minimHour) < 0)
+            hourSum( finishTime, returnTime, travelTime ); //Hora de llegada a la universidad
+            if (strcmp(leaveTime, minimHour) < 0)
             {
-                strcpy(minimHour, finishTime);
+                strcpy(minimHour, leaveTime);
             }
             if (strcmp(finishTime, maxHour) > 0)
             {
