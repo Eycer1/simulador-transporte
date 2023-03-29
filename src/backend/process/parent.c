@@ -81,7 +81,7 @@ void monitorRoutesDeamon( List* routesList, float timeFactor, char* timeRange[2]
     hoursDifference( timeRange[1], timeRange[0] );
     while( minutes < maxMin )
     {
-        //system("clear");
+        system("clear");
         printHeader();
         printf("%02d:%02d\n", hour, min);
         char* prtString = getRoutesStatus(routesList);
@@ -89,6 +89,24 @@ void monitorRoutesDeamon( List* routesList, float timeFactor, char* timeRange[2]
         usleep(timeFactor*1000000);
         incressHour( &hour, &min );
         minutes++;
+    }
+}
+
+void getChildrenResults( List* routesList, int* inTime, int* outTime, int* fail )
+{
+    while ( routesList->next )
+    {
+        int inTimeResult, outTimeResult, failResult;
+        int fd = routesList->content->route->pip[0];
+        char buffer[MSGSIZE] = {0};
+
+        /* Se obtiene el resultado que dejo el proceso hijo antes de morir*/
+        read( fd, buffer, MSGSIZE );
+        sscanf(buffer, "%d %d %d", &inTimeResult, &outTimeResult, &failResult );
+        *inTime += inTimeResult;
+        *outTime += outTimeResult;
+        *fail += failResult;
+        routesList = routesList->next;
     }
 }
 
@@ -101,11 +119,16 @@ por la salida estandar con el formato indicado
 y los imprimira en pantalla dependiendo de los mensajes 
 de los hijos
 */
-void parentProcessStart( List* routesList, float timeFactor, char* timeRange[2] )
+void parentProcessStart( List* routesList, float timeFactor, char* timeRange[2],
+                            int* inTime, int* outTime, int* fail )
 {
+    *inTime = 0;
+    *outTime = 0;
+    *fail = 0;
     printf("Iniciando proceso padre...\n");
     sleep(1);
     createChildren( routesList, timeRange, timeFactor);
     monitorRoutesDeamon(routesList, timeFactor, timeRange);
     waitChildren( routesList );
+    getChildrenResults( routesList, inTime, outTime, fail );
 }

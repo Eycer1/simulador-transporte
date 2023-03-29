@@ -218,6 +218,76 @@ void postWriteSemaphores( struct semaphores* sem, int numBuses)
 }
 
 /*
+Se calcula la cantidad de usuarios que llegaron a tiempo, los que llegaron tarde y los que no llegaron
+en esta ruta
+*/
+void findResults( Route* route, int* numUsersInTime, int* numUsersOutTime, int* numUsersFail )
+{
+    // Usuarios en la universidad (que abordaron algun bus)
+    List* bus = route->service->buses;
+    while (bus->next)
+    {
+        List* charge = bus->content->bus->charges;
+        char leaveTime[6];
+        char travelTime[6];
+        char arrivalTime[6];
+        char returnTime[6];
+        char finishTime[6];
+        strcpy(leaveTime, bus->content->bus->leaveTime);
+        strcpy(travelTime, route->travelTime);
+        hourSum( arrivalTime, leaveTime, travelTime ); //Hora de llegada a la parada
+        hourSum( returnTime, arrivalTime, "00:10" ); //Hora de retorno desde la parada mas un minuto para terminar de cerrar el hilo
+        hourSum( finishTime, returnTime, travelTime ); //Hora de llegada a la universidad
+
+        while (charge->next)
+        {
+            char expected[6];
+            char paradeArrivalTime[6];
+            sprintf(paradeArrivalTime, "%02d:00", charge->content->charge->parateArrivalTime);
+            hourSum( expected, paradeArrivalTime, "01:30" ); // Se espera llegar 1 hora y media despues de llegar a la parada
+
+            if (strcmp( expected, finishTime ) <= 0)
+            {
+                (*numUsersInTime) += charge->content->charge->numUsers;
+            }
+            else
+            {
+                (*numUsersOutTime) += charge->content->charge->numUsers;
+            }
+            
+            charge = charge->next;
+        }
+        
+        bus = bus->next;
+    }
+    // Usuarios en la parada (que no abordaron ningun bus)
+
+    Parade* parade = route->parade;
+    List* charge = parade->waitingCharges;
+    while (charge->next)
+    {
+        (*numUsersFail) += charge->content->charge->numUsers;
+        charge = charge->next;
+    }
+}
+
+
+/*
+Se escriben los resultados que se reportan al padre de la eficiencia del servicio
+
+*/
+void writeResults( Route* route )
+{
+    int in = 0, out = 0, fail = 0;
+    int fd = route->pip[1];
+    char buffer[MSGSIZE] = {0};
+
+    findResults( route, &in, &out, &fail );
+    sprintf(buffer, "%d %d %d", in, out, fail);
+    write(fd, buffer, MSGSIZE);
+}
+
+/*
 Creador de los hilos de ejecucion.
 Se creara un hilo por cada autobus de la ruta,
 se creara un autobus para incorporar cargas de usuarios
@@ -324,6 +394,10 @@ void monitorBusesDeamon( Route* route, char* timeRange[2], struct semaphores* se
         maxMin--;
     }
     while ( flag != -1 && maxMin > 0);
+    /*
+    Se obtienen los resultados de la ruta y se escribe en el pipe
+    */
+    writeResults( route );
 }
 
 /*

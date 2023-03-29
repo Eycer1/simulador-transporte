@@ -6,6 +6,7 @@
 #include "../utils/list.h"
 
 
-void parentProcessStart( List* routes, float timeFactor, char* timeRange[2] );
+void parentProcessStart( List* routesList, float timeFactor, char* timeRange[2],
+                            int* inTime, int* outTime, int* fail );
 
 #endif // PARENT_PROCESS_H
