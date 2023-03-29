@@ -55,10 +55,14 @@ Se llena el buffer segun el estatus y el porcentaje de progreso
 */
 void fillBuffer(char* buffer, int bufferSize, int percentage, int status)
 {
-    char sign = status == -1 ? '>' : '<';
+    char sign = status == -1 ? '>' : '-';
+    sign = status == 1 ? '<' : sign;
+    printf("Porcentaje: %d\n", percentage/10+2);
+
 
     if (status == -1 && percentage < 100)
     {
+        strcpy(buffer, " [----------] ");
         for (int i = 2; i < percentage/10+2; i++)
         {
             buffer[i] = sign;
@@ -66,6 +70,7 @@ void fillBuffer(char* buffer, int bufferSize, int percentage, int status)
     }
     else if( status == 1 && percentage < 100 )
     {
+        strcpy(buffer, " [----------] ");
         for (int i = percentage/10+1; i >= 2; i--)
         {
             buffer[i] = sign;
@@ -89,30 +94,27 @@ El trayecto y la direccion se decide segun el estatus del autobus
 void reportTravelProgress( Bus* bus, Parade* parade, char* clock, char* travelTime, char* leaveTime,
                          char* arrivalTime, char* returnTime, char* finishTime )
 {
-    char fillDirection = bus->status == -1 ? 'r' : 'l';
-
     /*
     Se obtiene el tiempo de inicio y finalizacion del viaje
     */
-    char* startTime;
-    char* endTime;
-    if (fillDirection == 'r')
+    char* startTime = clock;
+    char* endTime = clock;
+    if (bus->status == -1)
     {
         startTime = leaveTime;
         endTime = arrivalTime;
     }
-    else
+    else if( bus->status == 1 )
     {
         startTime = returnTime;
         endTime = finishTime;
     }
-
     
     /*
     Se obtiene porcentaje progreso del viaje 
     para luego llenar el buffer que leera el hilo principal
     */
-    int percentage = getProgressPercentage( startTime, endTime, travelTime, clock);        
+    int percentage = getProgressPercentage( startTime, endTime, travelTime, clock);
     fillBuffer(bus->buffer, BUS_BUFFER_SIZE, percentage, bus->status);
 }
 

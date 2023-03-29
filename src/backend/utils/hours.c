@@ -21,15 +21,16 @@ hour1 debe estar despues o al mismo tiempo de hour2
 */
 int hoursDifference( char* hour1, char* hour2 )
 {
-    int h1, h2, m1, m2;
+    int h, m, h1, h2, m1, m2;
+    sscanf(hour1, "%d:%d", &h1, &m1);
+    sscanf(hour2, "%d:%d", &h2, &m2);
     if (m1 < m2)
     {
-        m1 = m1*60;
+        m1 = m1 + 60;
         h1--;
     }
         
-    sscanf(hour1, "%d:%d", &h1, &m1);
-    sscanf(hour2, "%d:%d", &h2, &m2);
+    
     
     return (h1-h2)*60 + (m1-m2);
     
