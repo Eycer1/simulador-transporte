@@ -29,11 +29,15 @@ void* paradeTracker( void* arguments )
     */
     char clock[6];
     strcpy(clock, args->timeRange[0]);
-    while ( strcmp( clock, args->timeRange[1] ) <= 0 && charges->next )
+    while ( strcmp( clock, args->timeRange[1] ) <= 0 )
     {   
         char arrivalTime[6] ={0};
 
-        sprintf(arrivalTime, "%02d:00", charges->content->charge->parateArrivalTime );
+        if (charges->next)
+        {
+            sprintf(arrivalTime, "%02d:00", charges->content->charge->parateArrivalTime );
+        }
+        
         if ( strcmp(clock, arrivalTime) == 0 )
         {
             parade->waitingCharges = listPush( parade->waitingCharges, charges->content );
