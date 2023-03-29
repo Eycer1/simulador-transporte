@@ -167,7 +167,6 @@ void printfFinalReport( List* routes )
         while (bus->next)
         {
             List* charge = bus->content->bus->charges;
-            printf("Bus de %s en %p, libre %d\n", bus->content->bus->leaveTime, bus->content->bus, bus->content->bus->status);
             char leaveTime[6];
             char travelTime[6];
             char arrivalTime[6];
@@ -181,12 +180,10 @@ void printfFinalReport( List* routes )
 
             while (charge->next)
             {
-                printf("entro\n");
                 char expected[6];
                 char paradeArrivalTime[6];
                 sprintf(paradeArrivalTime, "%02d:00", charge->content->charge->parateArrivalTime);
                 hourSum( expected, paradeArrivalTime, "01:30" ); // Se espera llegar 1:30 despues de llegar a la parada
-                printf("Expected: %s\n", expected);
 
                 if (strcmp( expected, finishTime ) <= 0)
                 {
